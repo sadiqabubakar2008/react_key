@@ -10,8 +10,8 @@ body {
 
 .container {
   background: #ffffff;
-  width: 1000px;
-  min-height: 500px;
+  width: 1300px;
+  height: 720px;
   padding: 30px 25px;
   border-radius: 25px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.15);
@@ -23,12 +23,25 @@ h1 {
   text-align: center;
   letter-spacing: 3px;
   font-size: 28px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.input-section {
+#themeToggle {
+  align-self: flex-end;
+  margin-bottom: 15px;
+  background: #ddd;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.input-container {
   display: flex;
   gap: 10px;
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 15px;
   margin-bottom: 20px;
 }
 
@@ -47,7 +60,7 @@ button {
   border: none;
   border-radius: 8px;
   padding: 5px 12px;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   color: white;
 }
@@ -56,11 +69,18 @@ button:hover {
   background: #6aa94e;
 }
 
+.tasks-container {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 15px;
+  flex: 1;
+  overflow-y: auto;
+}
+
 ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  flex: 1;
 }
 
 li {
@@ -81,19 +101,11 @@ li input[type="checkbox"] {
   opacity: 0.6;
 }
 
-.hearts {
+.stars {
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   margin-top: 15px;
-  color: #cc5c5c;
-}
-
-
-#themeToggle {
-  align-self: flex-end;
-  margin-bottom: 15px;
-  background: #ddd;
-  color: black;
+  color: #f4c430;
 }
 
 body.dark {
@@ -105,24 +117,55 @@ body.dark .container {
   color: white;
 }
 
+body.dark .input-container {
+  background: #4a4a4a;
+}
+
+body.dark .tasks-container {
+  background: #505050;
+}
+
 body.dark input {
   border-bottom: 2px solid white;
   color: white;
 }
 
 body.dark li {
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #666;
 }
 
 body.dark button {
   background: #555;
-  color: white;
 }
 
 body.dark button:hover {
   background: #777;
 }
 
-body.dark .stars {
-  color: #ffd700;
+
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  flex: 1;
+  margin: 0 3px;
+  background: #e0e0e0;
+  color: black;
+}
+
+.filter-btn.active {
+  background: #7fbf5f;
+  color: white;
+}
+
+body.dark .filter-btn {
+  background: #555;
+  color: white;
+}
+
+body.dark .filter-btn.active {
+  background: #7fbf5f;
 }
