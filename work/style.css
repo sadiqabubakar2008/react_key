@@ -10,7 +10,7 @@ body {
 
 .container {
   background: #ffffff;
-  width: 360px;
+  width: 1000px;
   min-height: 500px;
   padding: 30px 25px;
   border-radius: 25px;
@@ -86,4 +86,43 @@ li input[type="checkbox"] {
   font-size: 18px;
   margin-top: 15px;
   color: #cc5c5c;
+}
+
+
+#themeToggle {
+  align-self: flex-end;
+  margin-bottom: 15px;
+  background: #ddd;
+  color: black;
+}
+
+body.dark {
+  background-color: #2e2e2e;
+}
+
+body.dark .container {
+  background: #3a3a3a;
+  color: white;
+}
+
+body.dark input {
+  border-bottom: 2px solid white;
+  color: white;
+}
+
+body.dark li {
+  border-bottom: 1px solid #555;
+}
+
+body.dark button {
+  background: #555;
+  color: white;
+}
+
+body.dark button:hover {
+  background: #777;
+}
+
+body.dark .stars {
+  color: #ffd700;
 }
