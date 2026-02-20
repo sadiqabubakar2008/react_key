@@ -3,6 +3,9 @@ let addBtn = document.getElementById("addBtn");
 let taskList = document.getElementById("taskList");
 let themeToggle = document.getElementById("themeToggle");
 let filterButtons = document.querySelectorAll(".filter-btn");
+let taskCounter = document.getElementById("taskCounter");
+
+let MAX_WORDS = 10;
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let currentFilter = "all";
@@ -10,6 +13,8 @@ let currentFilter = "all";
 if (localStorage.getItem("theme") === "dark") {
   document.body.classList.add("dark");
   themeToggle.textContent = "☀️";
+} else {
+  themeToggle.textContent = "🌙";
 }
 
 themeToggle.addEventListener("click", function () {
@@ -24,46 +29,59 @@ themeToggle.addEventListener("click", function () {
   }
 });
 
+function countWords(text) {
+  return text.trim().split(/\s+/).filter(function (word) {
+    return word !== "";
+  }).length;
+}
+
+function addTask() {
+  let text = taskInput.value.trim();
+  if (text === "") return;
+
+  if (countWords(text) > MAX_WORDS) {
+    alert("Maximum " + MAX_WORDS + " words allowed!");
+    return;
+  }
+
+  tasks.unshift({ text: text, completed: false });
+  saveAndRender();
+  taskInput.value = "";
+}
+
 addBtn.addEventListener("click", addTask);
 
 taskInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") addTask();
 });
 
-filterButtons.forEach(button => {
+filterButtons.forEach(function (button) {
   button.addEventListener("click", function () {
-    filterButtons.forEach(btn => btn.classList.remove("active"));
+    filterButtons.forEach(function (btn) {
+      btn.classList.remove("active");
+    });
     this.classList.add("active");
     currentFilter = this.dataset.filter;
     displayTasks();
   });
 });
 
-displayTasks();
-
-function addTask() {
-  let text = taskInput.value.trim();
-  if (text === "") return;
-
-  tasks.push({ text: text, completed: false });
+function saveAndRender() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  taskInput.value = "";
   displayTasks();
 }
 
 function displayTasks() {
   taskList.innerHTML = "";
 
-  let filteredTasks = tasks.filter(task => {
+  let filteredTasks = tasks.filter(function (task) {
     if (currentFilter === "pending") return !task.completed;
     if (currentFilter === "completed") return task.completed;
     return true;
   });
 
-  filteredTasks.forEach(task => {
-
+  filteredTasks.forEach(function (task) {
     let realIndex = tasks.indexOf(task);
-
     let li = document.createElement("li");
 
     let checkbox = document.createElement("input");
@@ -72,8 +90,7 @@ function displayTasks() {
 
     checkbox.addEventListener("change", function () {
       tasks[realIndex].completed = checkbox.checked;
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      displayTasks();
+      saveAndRender();
     });
 
     let span = document.createElement("span");
@@ -92,19 +109,25 @@ function displayTasks() {
       editBtn.textContent = "💾";
 
       editBtn.onclick = function () {
-        tasks[realIndex].text = editInput.value.trim();
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        displayTasks();
+        let newText = editInput.value.trim();
+        if (newText === "") return;
+
+        if (countWords(newText) > MAX_WORDS) {
+          alert("Maximum " + MAX_WORDS + " words allowed!");
+          return;
+        }
+
+        tasks[realIndex].text = newText;
+        saveAndRender();
       };
     });
 
     let deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "X";
+    deleteBtn.textContent = "🗑️";
 
     deleteBtn.addEventListener("click", function () {
       tasks.splice(realIndex, 1);
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      displayTasks();
+      saveAndRender();
     });
 
     li.appendChild(checkbox);
@@ -114,4 +137,17 @@ function displayTasks() {
 
     taskList.appendChild(li);
   });
+
+  let completed = tasks.filter(function (task) {
+    return task.completed;
+  }).length;
+
+  let pending = tasks.length - completed;
+
+  taskCounter.textContent =
+    "Total: " + tasks.length +
+    " | Completed: " + completed +
+    " | Pending: " + pending;
 }
+
+displayTasks();
